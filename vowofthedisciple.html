@@ -42,12 +42,12 @@
             border: 1px solid #ccc;
             border-radius: 5px;
             transition: background-color 0.3s;
-            width: 120px; 
+            width: 120px;
             box-sizing: border-box;
         }
 
         .option img {
-            width: 100px; 
+            width: 100px;
             height: 100px;
         }
 
@@ -58,6 +58,15 @@
         .incorrect {
             background-color: red;
         }
+
+        .selector-container {
+            margin-bottom: 20px;
+        }
+
+        .selector {
+            padding: 5px;
+            font-size: 16px;
+        }
     </style>
 </head>
 <body>
@@ -65,7 +74,15 @@
     <h1 class="main-logo">Vow of the Disciple</h1>
     <div class="quiz-container">
         <h2 class="quiz-title">Vow Symbol Quiz</h2>
-        <div class="question" id="question">Which symbol matches is: <span id="symbol-name"></span>?</div>
+        <div class="selector-container">
+            <label for="num-options">Number of symbols: </label>
+            <select id="num-options" class="selector">
+                <option value="4">4</option>
+                <option value="6">6</option>
+                <option value="8">8</option>
+            </select>
+        </div>
+        <div class="question" id="question">Which symbol matches the name: <span id="symbol-name"></span>?</div>
         <div class="options" id="options">
         </div>
     </div>
@@ -109,9 +126,10 @@
         }
 
         function loadQuestion() {
+            const numOptions = parseInt(document.getElementById('num-options').value);
             const shuffledSymbols = shuffle(symbols.slice());
             const correctSymbol = shuffledSymbols.pop();
-            const options = shuffle([...shuffledSymbols.slice(0, 3), correctSymbol]);
+            const options = shuffle([...shuffledSymbols.slice(0, numOptions - 1), correctSymbol]);
             
             document.getElementById('symbol-name').textContent = correctSymbol.name;
             
@@ -135,6 +153,7 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('num-options').addEventListener('change', loadQuestion);
             loadQuestion();
         });
     </script>
