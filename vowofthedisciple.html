@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ron Planets Game</title>
+    <link rel="stylesheet" href="main.css">
+    <script src="menu.js" defer></script>
+    <style>
+        .quiz-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .quiz-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .question {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        .options {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        .option {
+            cursor: pointer;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .option img {
+            width: 100px;
+            height: 100px;
+        }
+        .correct {
+            background-color: green;
+        }
+        .incorrect {
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+    <div id="menu"></div>
+    <h1 class="main-logo">Vow of the Disciple</h1>
+    <div class="quiz-container">
+        <h2 class="quiz-title">Vow Symbol Quiz</h2>
+        <div class="question" id="question">Which symbol matches the name: <span id="symbol-name"></span>?</div>
+        <div class="options" id="options">
+        </div>
+    </div>
+    <script>
+        const symbols = [
+        { name: 'Ascendant Plane', img: 'images/ascendantplane.JPG' },
+            { name: 'Black Heart', img: 'images/blackheart.JPG' },
+            { name: 'Box', img: 'images/box.JPG' },
+            { name: 'Brain', img: 'images/brain.JPG' },
+            { name: 'Cup', img: 'images/cup.JPG' },
+            { name: 'Dark', img: 'images/dark.JPG' },
+            { name: 'Earth', img: 'images/earth.JPG' },
+            { name: 'Enter', img: 'images/enter.JPG' },
+            { name: 'Eyes', img: 'images/eyes.JPG' },
+            { name: 'Fleet', img: 'images/fleet.JPG' },
+            { name: 'Flower', img: 'images/flower.JPG' },
+            { name: 'Forsaken', img: 'images/forsaken.JPG' },
+            { name: 'Garden of Salvation', img: 'images/gos.JPG' },
+            { name: 'Guardian', img: 'images/guardian.JPG' },
+            { name: 'Hands', img: 'images/hands.JPG' },
+            { name: 'Kill', img: 'images/kill.JPG' },
+            { name: 'Light', img: 'images/light.JPG' },
+            { name: 'Neutral', img: 'images/neutral.JPG' },
+            { name: 'Praise', img: 'images/praise.JPG' },
+            { name: 'Prism', img: 'images/prism.JPG' },
+            { name: 'Pyramid', img: 'images/pyramid.JPG' },
+            { name: 'Snake', img: 'images/snake.JPG' },
+            { name: 'Soul', img: 'images/soul.JPG' },
+            { name: 'Tower', img: 'images/tower.JPG' },
+            { name: 'Traveller', img: 'images/traveller.JPG' },
+            { name: 'Witch Queen', img: 'images/witchqueen.JPG' },
+            { name: 'Witness', img: 'images/witness.JPG' }
+            
+        ];
+
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function loadQuestion() {
+            const shuffledSymbols = shuffle(symbols.slice());
+            const correctSymbol = shuffledSymbols.pop();
+            const options = shuffle([...shuffledSymbols.slice(0, 3), correctSymbol]);
+            
+            document.getElementById('symbol-name').textContent = correctSymbol.name;
+            
+            const optionsContainer = document.getElementById('options');
+            optionsContainer.innerHTML = '';
+
+            options.forEach(option => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option';
+                optionDiv.innerHTML = `<img src="${option.img}" alt="${option.name}">`;
+                optionDiv.addEventListener('click', () => {
+                    if (option.name === correctSymbol.name) {
+                        optionDiv.classList.add('correct');
+                    } else {
+                        optionDiv.classList.add('incorrect');
+                    }
+                    setTimeout(loadQuestion, 1000); // Load new question after 1 second
+                });
+                optionsContainer.appendChild(optionDiv);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadQuestion();
+        });
+    </script>
+</body>
+</html>

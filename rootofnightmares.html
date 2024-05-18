@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ron Planets Game</title>
+    <link rel="stylesheet" href="main.css">
+    <script src="menu.js" defer></script>
+</head>
+<body>
+    <div id="menu"></div>
+    <h1 class="main-logo">Root of Nightmares</h1>
+    <div class="centered-content">
+        <button class="reset-btn" onclick="resetGame()">Reset</button>
+        <div class="container">
+            <div class="top">
+                <div class="circle" id="circle1"></div>
+                <div class="circle" id="circle2"></div>
+            </div>
+            <div class="bottom">
+                <div class="circle" id="circle3"></div>
+            </div>
+        </div>
+        <div class="output" id="output">Order: </div>
+    </div>
+    <br>
+    <img src="pnumbers.png" alt="Planets" style="margin-left: 325px;" height="400">
+    <script>
+        function getRandomColorCombination() {
+            const colors = Math.random() > 0.5 
+                ? ['black', 'black', 'white']
+                : ['white', 'white', 'black'];
+            return colors.sort(() => Math.random() - 0.5);
+        }
+
+        function assignColorsAndWeights() {
+            const colors = getRandomColorCombination();
+            const weights = [0, 1, 2].sort(() => Math.random() - 0.5);
+
+            circles.forEach((circle, index) => {
+                circle.element.style.backgroundColor = colors[index];
+                circle.weight = weights[index];
+                circle.clicked = false; 
+                circle.element.style.pointerEvents = 'auto'; 
+            });
+        }
+
+        const circles = [
+            { element: document.getElementById('circle1'), weight: 0, position: 'left', clicked: false },
+            { element: document.getElementById('circle2'), weight: 0, position: 'right', clicked: false },
+            { element: document.getElementById('circle3'), weight: 0, position: 'middle', clicked: false }
+        ];
+
+        let clickOrder = [];
+
+        function handleClick(event) {
+            const clickedCircle = circles.find(circle => circle.element === event.target);
+            
+            if (!clickedCircle.clicked && clickOrder.length < 3) {
+                clickedCircle.clicked = true;
+                clickOrder.push(clickedCircle);
+
+                const displayedClicks = clickOrder.slice(-3).map(circle => circle.position).join(', ');
+                const outputElement = document.getElementById('output');
+                outputElement.innerText = 'Order: ' + displayedClicks;
+
+                if (clickOrder.length === 3) {
+                    const isCorrectSequence = (clickOrder[0].element.style.backgroundColor === 'black' &&
+                                                clickOrder[1].element.style.backgroundColor === 'white' &&
+                                                clickOrder[2].element.style.backgroundColor === 'black') ||
+                                               (clickOrder[0].element.style.backgroundColor === 'white' &&
+                                                clickOrder[1].element.style.backgroundColor === 'black' &&
+                                                clickOrder[2].element.style.backgroundColor === 'white');
+                    if (isCorrectSequence) {
+                        outputElement.style.color = 'green';
+                    } else {
+                        outputElement.style.color = 'red';
+                    }
+                }
+
+                clickedCircle.element.style.pointerEvents = 'none';
+            }
+        }
+
+        function resetGame() {
+            clickOrder = [];
+            const outputElement = document.getElementById('output');
+            outputElement.innerText = 'Order: ';
+            outputElement.style.color = 'black';
+            assignColorsAndWeights();
+        }
+
+        circles.forEach(circle => {
+            circle.element.addEventListener('click', handleClick);
+        });
+
+        assignColorsAndWeights();
+    </script>
+</body>
+</html>
