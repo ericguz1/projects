@@ -3,43 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ron Planets Game</title>
+    <title>VoTD</title>
     <link rel="stylesheet" href="main.css">
     <script src="menu.js" defer></script>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         .quiz-container {
             text-align: center;
-            margin-top: 20px;
+            padding: 20px;
         }
+
         .quiz-title {
             font-size: 24px;
             margin-bottom: 20px;
         }
+
         .question {
             font-size: 20px;
             margin-bottom: 10px;
         }
+
         .options {
             display: flex;
+            flex-wrap: wrap;
             justify-content: center;
             gap: 10px;
         }
+
         .option {
             cursor: pointer;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
             transition: background-color 0.3s;
+            width: calc(50% - 20px); /* Adjusting for margin */
         }
+
         .option img {
-            width: 100px;
-            height: 100px;
+            width: 100%;
+            height: auto;
         }
+
         .correct {
             background-color: green;
         }
+
         .incorrect {
             background-color: red;
+        }
+
+        @media (min-width: 600px) {
+            .option {
+                width: calc(25% - 20px); /* Adjusting for margin */
+            }
         }
     </style>
 </head>
@@ -50,11 +72,12 @@
         <h2 class="quiz-title">Vow Symbol Quiz</h2>
         <div class="question" id="question">Which symbol matches the name: <span id="symbol-name"></span>?</div>
         <div class="options" id="options">
+            <!-- Options will be dynamically inserted here -->
         </div>
     </div>
     <script>
         const symbols = [
-        { name: 'Ascendant Plane', img: 'images/ascendantplane.JPG' },
+            { name: 'Ascendant Plane', img: 'images/ascendantplane.JPG' },
             { name: 'Black Heart', img: 'images/blackheart.JPG' },
             { name: 'Box', img: 'images/box.JPG' },
             { name: 'Brain', img: 'images/brain.JPG' },
@@ -66,7 +89,7 @@
             { name: 'Fleet', img: 'images/fleet.JPG' },
             { name: 'Flower', img: 'images/flower.JPG' },
             { name: 'Forsaken', img: 'images/forsaken.JPG' },
-            { name: 'Garden of Salvation', img: 'images/gos.JPG' },
+            { name: 'gos', img: 'images/gos.JPG' },
             { name: 'Guardian', img: 'images/guardian.JPG' },
             { name: 'Hands', img: 'images/hands.JPG' },
             { name: 'Kill', img: 'images/kill.JPG' },
@@ -81,7 +104,6 @@
             { name: 'Traveller', img: 'images/traveller.JPG' },
             { name: 'Witch Queen', img: 'images/witchqueen.JPG' },
             { name: 'Witness', img: 'images/witness.JPG' }
-            
         ];
 
         function shuffle(array) {
