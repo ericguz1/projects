@@ -56,7 +56,7 @@
             let selectedLocations = [];
             let correctLocations = [];
             let clicks = 0;
-            const resetTime = 2000; 
+            const resetTime = 1000; 
 
             const generateRandomLocations = () => {
                 let loc1 = locations[Math.floor(Math.random() * locations.length)];
@@ -68,12 +68,9 @@
             };
 
             const resetCircleColors = () => {
-                setTimeout(() => {
-                    document.querySelectorAll('.circle').forEach(circle => {
-                        circle.style.backgroundColor = 'red';
-                    });
-                    document.getElementById('game-status').textContent = '';
-                }, resetTime);
+                document.querySelectorAll('.circle').forEach(circle => {
+                    circle.style.backgroundColor = 'red';
+                });
             };
 
             const startGame = () => {
@@ -82,6 +79,15 @@
                 document.getElementById('game-status').textContent = `Find ${correctLocations.join(' and ')}`;
                 selectedLocations = [];
                 clicks = 0;
+                document.getElementById('start-game').style.display = 'none';
+            };
+
+            const handleCorrectSelection = () => {
+                document.getElementById('game-status').textContent = 'Correct!';
+                setTimeout(() => {
+                    resetCircleColors();
+                    startGame();
+                }, resetTime);
             };
 
             document.getElementById('start-game').addEventListener('click', startGame);
@@ -95,14 +101,25 @@
                         clicks++;
                         if (clicks === 2) {
                             if (selectedLocations.sort().toString() === correctLocations.sort().toString()) {
-                                document.getElementById('game-status').textContent = 'Correct!';
+                                handleCorrectSelection();
                             } else {
                                 document.getElementById('game-status').textContent = 'Incorrect. Try again.';
+                                const sound = document.getElementById('incorrect-sound').cloneNode();
+                                sound.play();
+                                setTimeout(() => {
+                                    resetCircleColors();
+                                    startGame();
+                                }, resetTime);
                             }
-                            resetCircleColors();
                         }
                     } else if (!correctLocations.includes(id)) {
-                        document.getElementById('incorrect-sound').play();
+                        document.getElementById('game-status').textContent = 'Incorrect. Try again.';
+                        const sound = document.getElementById('incorrect-sound').cloneNode();
+                        sound.play();
+                        setTimeout(() => {
+                            resetCircleColors();
+                            startGame();
+                        }, resetTime);
                     }
                 });
             });
