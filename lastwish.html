@@ -17,7 +17,7 @@
             position: relative;
             width: 600px;
             height: 400px;
-            background-image: url('images/rivenwitheyes.JPG'); /* Replace with your image path */
+            background-image: url('images/rivenwitheyes.JPG'); 
             background-size: cover;
         }
         .hidden {
@@ -49,13 +49,14 @@
             <div id="R5" class="circle" style="top: 160px; left: 325px; width: 15px; height: 15px;"></div>
         </div>
     </div>
+    <audio id="incorrect-sound" src="rivencut.mp3"></audio>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const locations = ['L1', 'L2', 'L3', 'L4', 'L5', 'R1', 'R2', 'R3', 'R4', 'R5'];
             let selectedLocations = [];
             let correctLocations = [];
             let clicks = 0;
-            const resetTime = 2000; // 2 seconds
+            const resetTime = 2000; 
 
             const generateRandomLocations = () => {
                 let loc1 = locations[Math.floor(Math.random() * locations.length)];
@@ -77,8 +78,8 @@
 
             const startGame = () => {
                 correctLocations = generateRandomLocations();
-                console.log(`Find and click on ${correctLocations.join(' and ')}`); // For debugging
-                document.getElementById('game-status').textContent = `Find and click on ${correctLocations.join(' and ')}`;
+                console.log(`Find ${correctLocations.join(' and ')}`); 
+                document.getElementById('game-status').textContent = `Find ${correctLocations.join(' and ')}`;
                 selectedLocations = [];
                 clicks = 0;
             };
@@ -94,12 +95,14 @@
                         clicks++;
                         if (clicks === 2) {
                             if (selectedLocations.sort().toString() === correctLocations.sort().toString()) {
-                                document.getElementById('game-status').textContent = 'Correct! You found both locations.';
+                                document.getElementById('game-status').textContent = 'Correct!';
                             } else {
                                 document.getElementById('game-status').textContent = 'Incorrect. Try again.';
                             }
                             resetCircleColors();
                         }
+                    } else if (!correctLocations.includes(id)) {
+                        document.getElementById('incorrect-sound').play();
                     }
                 });
             });
