@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LW</title>
+    <link rel="stylesheet" href="main.css">
+    <script src="menu.js" defer></script>
+    <style>
+        .circle {
+            border-radius: 50%;
+            background-color: red;
+            position: absolute;
+            cursor: pointer;
+        }
+        .container {
+            position: relative;
+            width: 600px;
+            height: 400px;
+            background-image: url('images/rivenwitheyes.JPG'); /* Replace with your image path */
+            background-size: cover;
+        }
+        .hidden {
+            display: none;
+        }
+        .centered-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="menu"></div>
+    <h1 class="main-logo">Last Wish</h1>
+    <div class="centered-content">
+        <div id="game-status"></div>
+        <button id="start-game">Start Game</button>
+        <div class="container">
+            <div id="L1" class="circle" style="top: 143px; left: 160px; width: 15px; height: 15px;"></div>
+            <div id="L2" class="circle" style="top: 173px; left: 175px; width: 15px; height: 15px;"></div>
+            <div id="L3" class="circle" style="top: 143px; left: 185px; width: 15px; height: 15px;"></div>
+            <div id="L4" class="circle" style="top: 120px; left: 203px; width: 15px; height: 15px;"></div>
+            <div id="L5" class="circle" style="top: 165px; left: 226px; width: 15px; height: 15px;"></div>
+            <div id="R1" class="circle" style="top: 165px; left: 263px; width: 15px; height: 15px;"></div>
+            <div id="R2" class="circle" style="top: 138px; left: 276px; width: 15px; height: 15px;"></div>
+            <div id="R3" class="circle" style="top: 108px; left: 291px; width: 15px; height: 15px;"></div>
+            <div id="R4" class="circle" style="top: 138px; left: 310px; width: 15px; height: 15px;"></div>
+            <div id="R5" class="circle" style="top: 160px; left: 325px; width: 15px; height: 15px;"></div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const locations = ['L1', 'L2', 'L3', 'L4', 'L5', 'R1', 'R2', 'R3', 'R4', 'R5'];
+            let selectedLocations = [];
+            let correctLocations = [];
+            let clicks = 0;
+            const resetTime = 2000; // 2 seconds
+
+            const generateRandomLocations = () => {
+                let loc1 = locations[Math.floor(Math.random() * locations.length)];
+                let loc2;
+                do {
+                    loc2 = locations[Math.floor(Math.random() * locations.length)];
+                } while (loc1 === loc2);
+                return [loc1, loc2];
+            };
+
+            const resetCircleColors = () => {
+                setTimeout(() => {
+                    document.querySelectorAll('.circle').forEach(circle => {
+                        circle.style.backgroundColor = 'red';
+                    });
+                    document.getElementById('game-status').textContent = '';
+                }, resetTime);
+            };
+
+            const startGame = () => {
+                correctLocations = generateRandomLocations();
+                console.log(`Find and click on ${correctLocations.join(' and ')}`); // For debugging
+                document.getElementById('game-status').textContent = `Find and click on ${correctLocations.join(' and ')}`;
+                selectedLocations = [];
+                clicks = 0;
+            };
+
+            document.getElementById('start-game').addEventListener('click', startGame);
+
+            document.querySelectorAll('.circle').forEach(circle => {
+                circle.addEventListener('click', (event) => {
+                    const id = event.target.id;
+                    if (correctLocations.includes(id) && !selectedLocations.includes(id)) {
+                        selectedLocations.push(id);
+                        event.target.style.backgroundColor = 'green';
+                        clicks++;
+                        if (clicks === 2) {
+                            if (selectedLocations.sort().toString() === correctLocations.sort().toString()) {
+                                document.getElementById('game-status').textContent = 'Correct! You found both locations.';
+                            } else {
+                                document.getElementById('game-status').textContent = 'Incorrect. Try again.';
+                            }
+                            resetCircleColors();
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
